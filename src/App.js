@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import List from './List.js';
 import './App.css';
-import { toUnicode } from 'punycode';
+import GroceryForm from "./GroceryForm"
 
 class App extends Component {
 
@@ -15,6 +15,14 @@ class App extends Component {
 
     ]
   };
+deleteItem = (id) => {
+  const groceries = this.state.groceries.filter( grocery => {
+    if (grocery.id !== id){
+      return grocery
+    }
+  })
+  this.setState({ groceries, })
+  }
 
   getId = () => {
     return (Math.floor((1+Math.random()) * 0x10000)
@@ -24,7 +32,7 @@ class App extends Component {
 
   addItem = (name) => {
     const grocery = {id: this.getId(), name, complete: false}
-    this.setState({ groceries: [grocery, ...this.state.todos] })
+    this.setState({ groceries: [grocery, ...this.state.groceries] })
   }
 
   handleClick = (id) => {
@@ -43,7 +51,8 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Grocery List</h1>
-        <List name="Grocery-List" items={this.state.groceries} handleClick={this.handleClick} />
+        <List name="Grocery-List" items={this.state.groceries} handleClick={this.handleClick} deleteItem={this.deleteItem} />
+        <GroceryForm addItemFunction={this.addItem} />
       </div>
     );
   }
